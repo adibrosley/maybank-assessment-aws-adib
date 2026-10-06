@@ -1,0 +1,32 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ProtectAuditTrail",
+      "Effect": "Deny",
+      "Action": [
+        "cloudtrail:StopLogging", "cloudtrail:DeleteTrail", "cloudtrail:UpdateTrail",
+        "cloudtrail:PutEventSelectors",
+        "config:StopConfigurationRecorder", "config:DeleteConfigurationRecorder",
+        "config:DeleteDeliveryChannel",
+        "guardduty:DeleteDetector", "guardduty:DisassociateFromMasterAccount",
+        "guardduty:UpdateDetector",
+        "securityhub:DisableSecurityHub",
+        "access-analyzer:DeleteAnalyzer",
+        "ec2:DeleteFlowLogs", "logs:DeleteLogGroup"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "ArnNotLike": { "aws:PrincipalArn": "arn:aws:iam::*:role/AWSControlTowerExecution" }
+      }
+    },
+    { "Sid": "DenyLeaveOrg", "Effect": "Deny", "Action": "organizations:LeaveOrganization", "Resource": "*" },
+    {
+      "Sid": "DenyRootUser",
+      "Effect": "Deny",
+      "Action": "*",
+      "Resource": "*",
+      "Condition": { "StringLike": { "aws:PrincipalArn": "arn:aws:iam::*:root" } }
+    }
+  ]
+}

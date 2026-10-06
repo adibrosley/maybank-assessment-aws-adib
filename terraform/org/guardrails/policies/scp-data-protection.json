@@ -1,0 +1,35 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyUnencryptedRds",
+      "Effect": "Deny",
+      "Action": ["rds:CreateDBCluster", "rds:CreateDBInstance"],
+      "Resource": "*",
+      "Condition": { "Bool": { "rds:StorageEncrypted": "false" } }
+    },
+    {
+      "Sid": "RequireImdsV2",
+      "Effect": "Deny",
+      "Action": "ec2:RunInstances",
+      "Resource": "arn:aws:ec2:*:*:instance/*",
+      "Condition": { "StringNotEquals": { "ec2:MetadataHttpTokens": "required" } }
+    },
+    {
+      "Sid": "ProtectS3AccountPublicAccessBlock",
+      "Effect": "Deny",
+      "Action": "s3:PutAccountPublicAccessBlock",
+      "Resource": "*"
+    },
+    {
+      "Sid": "DenyBackupVaultTampering",
+      "Effect": "Deny",
+      "Action": ["backup:DeleteBackupVault", "backup:DeleteRecoveryPoint",
+                 "backup:PutBackupVaultAccessPolicy", "backup:DeleteBackupVaultLockConfiguration"],
+      "Resource": "*",
+      "Condition": {
+        "ArnNotLike": { "aws:PrincipalArn": "arn:aws:iam::*:role/break-glass-admin" }
+      }
+    }
+  ]
+}

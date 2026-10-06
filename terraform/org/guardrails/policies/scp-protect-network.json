@@ -1,0 +1,28 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyNetworkTopologyChanges",
+      "Effect": "Deny",
+      "Action": [
+        "ec2:CreateRoute", "ec2:ReplaceRoute", "ec2:DeleteRoute",
+        "ec2:CreateRouteTable", "ec2:DeleteRouteTable",
+        "ec2:AssociateRouteTable", "ec2:DisassociateRouteTable",
+        "ec2:ReplaceRouteTableAssociation",
+        "ec2:AttachInternetGateway", "ec2:CreateInternetGateway",
+        "ec2:CreateNatGateway", "ec2:CreateVpcPeeringConnection",
+        "ec2:AcceptVpcPeeringConnection",
+        "ec2:CreateTransitGatewayVpcAttachment", "ec2:DeleteTransitGatewayVpcAttachment"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "ArnNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/platform-network-deploy",
+            "arn:aws:iam::*:role/break-glass-admin"
+          ]
+        }
+      }
+    }
+  ]
+}

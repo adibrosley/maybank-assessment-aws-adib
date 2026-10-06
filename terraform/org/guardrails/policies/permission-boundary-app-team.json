@@ -1,0 +1,55 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowWorkloadServices",
+      "Effect": "Allow",
+      "Action": [
+        "eks:*", "rds:*", "elasticloadbalancing:*", "ec2:Describe*",
+        "ec2:CreateSecurityGroup", "ec2:AuthorizeSecurityGroup*", "ec2:RevokeSecurityGroup*",
+        "ec2:CreateTags", "s3:*", "secretsmanager:*", "kms:Encrypt", "kms:Decrypt",
+        "kms:GenerateDataKey*", "logs:*", "cloudwatch:*", "sqs:*", "sns:*",
+        "ecr:*", "autoscaling:*", "backup:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowRoleCreationOnlyWithBoundary",
+      "Effect": "Allow",
+      "Action": ["iam:CreateRole", "iam:PutRolePermissionsBoundary",
+                 "iam:AttachRolePolicy", "iam:PutRolePolicy", "iam:DetachRolePolicy",
+                 "iam:DeleteRolePolicy"],
+      "Resource": "arn:aws:iam::*:role/app/*",
+      "Condition": {
+        "StringEquals": {
+          "iam:PermissionsBoundary": "arn:aws:iam::${aws:PrincipalAccount}:policy/app-team-boundary"
+        }
+      }
+    },
+    {
+      "Sid": "AllowPassAndReadAppRoles",
+      "Effect": "Allow",
+      "Action": ["iam:PassRole", "iam:GetRole", "iam:ListRole*", "iam:TagRole", "iam:DeleteRole"],
+      "Resource": "arn:aws:iam::*:role/app/*"
+    },
+    {
+      "Sid": "DenyBoundaryTampering",
+      "Effect": "Deny",
+      "Action": ["iam:DeleteRolePermissionsBoundary", "iam:CreatePolicyVersion",
+                 "iam:DeletePolicy", "iam:SetDefaultPolicyVersion"],
+      "Resource": ["arn:aws:iam::*:policy/app-team-boundary", "arn:aws:iam::*:role/*"]
+    },
+    {
+      "Sid": "DenyPlatformResources",
+      "Effect": "Deny",
+      "Action": ["ec2:CreateRoute*", "ec2:ReplaceRoute*", "ec2:DeleteRoute*",
+                 "ec2:AssociateRouteTable", "ec2:DisassociateRouteTable",
+                 "ec2:CreateTransitGateway*", "ec2:DeleteTransitGateway*", "ec2:ModifyTransitGateway*",
+                 "ec2:CreateVpc*", "ec2:DeleteVpc*", "ec2:ModifyVpc*", "ec2:AcceptVpc*",
+                 "ec2:CreateInternetGateway", "ec2:AttachInternetGateway", "ec2:CreateNatGateway",
+                 "cloudtrail:*", "config:Delete*", "config:Stop*",
+                 "organizations:*", "account:*", "iam:CreateUser", "iam:CreateAccessKey"],
+      "Resource": "*"
+    }
+  ]
+}

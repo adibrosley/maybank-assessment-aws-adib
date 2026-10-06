@@ -1,0 +1,25 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+crash.log
+.terraform.lock.hcl.bak
+backend.hcl
+!terraform/workloads/payments/envs/*/backend.hcl
+*.tfvars.local
+
+# Pipeline outputs
+plan.txt
+plan.json
+apply.txt
+postcheck.txt
+destroy.txt
+evidence.json
+*-report.xml
+
+# Never commit credentials
+.aws/
+*.pem
+.env
