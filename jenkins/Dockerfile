@@ -26,7 +26,7 @@ RUN ARCH=$(uname -m) && [ "$ARCH" = "aarch64" ] && ARCH=arm64; \
     | tar xz -C /usr/local/bin conftest
 
 # Checkov
-RUN pip3 install --no-cache-dir --break-system-packages checkov
+RUN pip3 install --no-cache-dir --break-system-packages --ignore-installed checkov
 
 USER jenkins
 

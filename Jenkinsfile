@@ -84,7 +84,7 @@ pipeline {
         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-lab']]) {
           script {
             // -detailed-exitcode: 0 = no changes, 1 = error, 2 = changes present
-            def rc = sh(returnStatus: true, script: 'terraform -chdir="$STACK_DIR" plan -out="$PLAN_FILE" -detailed-exitcode -no-color | tee plan.txt')
+            def rc = sh(returnStatus: true, script: 'terraform -chdir="$STACK_DIR" plan -out="$PLAN_FILE" -detailed-exitcode -no-color > plan.txt; rc=$?; cat plan.txt; exit $rc')
             if (rc == 1) { error 'terraform plan failed' }
             env.HAS_CHANGES = (rc == 2) ? 'true' : 'false'
             sh 'terraform -chdir="$STACK_DIR" show -json "$PLAN_FILE" > plan.json'
