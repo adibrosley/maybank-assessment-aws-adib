@@ -17,7 +17,10 @@ RUN ARCH=$(uname -m) && curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linu
  && unzip -q /tmp/awscli.zip -d /tmp && /tmp/aws/install && rm -rf /tmp/aws /tmp/awscli.zip
 
 # tflint
-RUN curl -fsSL https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+RUN ARCH=$(dpkg --print-architecture) \
+ && curl -fsSL "https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_${ARCH}.zip" -o /tmp/tflint.zip \
+ && unzip -q /tmp/tflint.zip -d /usr/local/bin && rm /tmp/tflint.zip \
+ && tflint --version
 
 # Conftest (OPA)
 ARG CONFTEST_VERSION=0.56.0

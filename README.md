@@ -34,6 +34,7 @@ A regulated payment service (PCI DSS cardholder data environment, operating unde
 | IaC and pipeline extracts | [terraform/](terraform/), [policy/](policy/), [Jenkinsfile](Jenkinsfile) |
 | Incident analysis and recovery runbook | [docs/04-drift-incident-runbook.md](docs/04-drift-incident-runbook.md) |
 | RTO/RPO and cost assumptions | [docs/assumptions.md](docs/assumptions.md) |
+| Exclusions, validation steps, known limitations, sources, AI assistance | [docs/07-validation-and-limitations.md](docs/07-validation-and-limitations.md) |
 
 ## Repository layout
 
@@ -48,10 +49,10 @@ A regulated payment service (PCI DSS cardholder data environment, operating unde
 │   └── workloads/payments/         # Aurora Global DB, AWS Backup, per-env config
 ├── policy/                         # OPA/Conftest rules run against terraform plan
 ├── jenkins/                        # Local Jenkins image with Terraform tooling
-└── lab/                            # Low-cost hands-on version deployable via Jenkins
+└── lab/                            # Low-cost slice deployed via Jenkins (validation run, see docs/07)
 ```
 
-Hands-on walkthrough (Terraform, GitHub, Jenkins, drift simulation): [LEARNING.md](LEARNING.md)
+The `lab/` stack was deployed and operated end to end through the pipeline on AWS, including the Task 4 drift scenario: [lab/README.md](lab/README.md), results in [docs/07](docs/07-validation-and-limitations.md#2-validation-performed).
 
 ## Design principles
 

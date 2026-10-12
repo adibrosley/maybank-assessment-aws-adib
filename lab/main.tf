@@ -10,7 +10,7 @@ terraform {
   required_providers {
     aws = { source = "hashicorp/aws", version = "~> 6.0" }
   }
-  backend "s3" {} # values come from backend.hcl (see LEARNING.md)
+  backend "s3" {} # values come from backend.hcl (see lab/README.md)
 }
 
 provider "aws" {
